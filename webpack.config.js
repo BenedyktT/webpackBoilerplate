@@ -1,5 +1,9 @@
+const path = require('path');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const imageminMozjpeg = require('imagemin-mozjpeg');
 module.exports = {
   module: {
     rules: [
@@ -42,6 +46,14 @@ module.exports = {
     new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
+      }),
+    new CopyWebpackPlugin([{
+    from: path.resolve(__dirname,'src'),
+    to: path.resolve(__dirname, 'dist/styles/assets')
+    }]),
+    new ImageminPlugin({
+        pngquant: ({quality: [0.5, 0.5]}),
+        plugins: [imageminMozjpeg({quality: 50})]
       })
   ]
 };
