@@ -19,10 +19,22 @@ module.exports = {
         use: [
           {
             loader: "html-loader",
-            options: { minimize: true }
+            options: { minimize: false }
           }
         ]
       },
+             {
+         test: /\.(png|svg|jpg|gif)$/,
+         use: [
+           {
+             loader: 'file-loader',
+             options: {
+                 name:'[name].[ext]',
+                 outputPath: 'assets/img',
+             }
+           }
+         ]
+       },
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
@@ -47,10 +59,10 @@ module.exports = {
         filename: "[name].css",
         chunkFilename: "[id].css"
       }),
-    new CopyWebpackPlugin([{
-    from: path.resolve(__dirname,'src'),
-    to: path.resolve(__dirname, 'dist/styles/assets')
-    }]),
+      new CopyWebpackPlugin([{
+        from: 'src/images/',
+        to: path.resolve(__dirname, 'dist')
+      }]),
     new ImageminPlugin({
         pngquant: ({quality: [0.5, 0.5]}),
         plugins: [imageminMozjpeg({quality: 50})]
